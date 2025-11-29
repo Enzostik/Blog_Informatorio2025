@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Data for the search engine -->
+    <meta name"description" content="Proyecto final Informatorio 2025.">
+    <meta name="keywords" content="Informatorio, Blog, 2025, Noticias">
+    <meta name="author" content="Grupo 1 - Comisión 2 - Informatorio 2025">
+    <!-- Design parameters -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogInfo2025 | {% block title %} Página principal {% endblock title %}</title>
+    <!-- Favicon / webpage icon -->
+    <!-- For .ico format use 'x-icon' type -->
+    <link rel="icon" href={% static 'img/favicon.ico'%} sizes="32x32" type="image/x-icon">
+    <!-- Sugested colour for browser tab (in Android) -->
+    <meta name="theme-color" content="#048080ff">
+    <!-- Load CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    {% block header_params %}
+    {% comment %}
+    TODO: Add headers parameters and css files/links here
+    {% endcomment %}
+    {% endblock header_params %}
+</head>
+<body>
+    <!-- Header for every page -->
+    <header>
+        {% comment %}
+        TODO: header here
+        {% endcomment %}
+        <nav style="display: flex; height: 75px; background-color: lightblue;">
+            <ul>
+                <li><a href={% url "home" %}>Página principal</a></li>
+                {% if user.is_authenticated %}
+                <li><a href={% url "profile" %}>{{ user.username }}</a></li>
+                <li><a href={% url "logout" %}>Cerrar sesión</a></li>
+                {% else %}
+                <li><a href={% url "login" %}>Iniciar sesión</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <!-- Page's content -->
+    <main>
+        {% block content %}
+        {% comment %}
+        TODO: Main content here
+        {% endcomment %}
+        <h1>Ejemplo de titulo</h1>
+        <p>EJEMPLO DE TEXTO</p>
+        <p>EJEMPLO DE TEXTO</p>
+        <p>EJEMPLO DE TEXTO</p>
+        <p>EJEMPLO DE TEXTO</p>
+        <p>EJEMPLO DE TEXTO</p>
+        {% endblock content %}
+    </main>
+    <!-- Footer for every page -->
+    <footer>
+        {% comment %}
+        TODO: footer here
+        {% endcomment %}
+    </footer>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}
+    {% comment %}
+    TODO: Add js script here
+    {% endcomment %}
+    {% endblock scripts %}
+</body>
+</html>

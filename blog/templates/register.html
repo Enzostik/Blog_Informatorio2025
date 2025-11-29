@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+
+{% block title %}Registrarse{% endblock title %}
+
+{% block content %}
+    <h1>REGISTER USER</h1>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+    <a href={% url 'login' %}>Ya tengo usuario</a>
+{% endblock content %}
