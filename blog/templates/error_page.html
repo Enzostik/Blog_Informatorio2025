@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+
+{% block title %}{{ title_page }}{% endblock title %}
+
+{% block content %}
+    <h1>{{ header_page }}</h1>
+    <p>{{ message }}</p>
+    <ul>
+        <a href={% url "home" %}>Volver a la página principal.</a>
+    </ul>
+{% endblock content %}

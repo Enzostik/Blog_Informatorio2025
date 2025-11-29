@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+
+{% block title %}Iniciar sesión{% endblock title %}
+
+{% block content %}
+    <h1>PERFIL DEL USUARIO {{ user_obj.username }}</h1>
+    <h2>{{ user_obj.email }}</h2>
+    <h2>{{ user_obj.first_name }}</h2>
+    <h2>{{ user_obj.last_name }}</h2>
+{% endblock content %}

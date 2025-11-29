@@ -25,3 +25,10 @@ urlpatterns = [
     path('news/', include('apps.news.urls')),
     path('', include('apps.authuser.urls')),
 ]
+
+
+#Error pages
+handler400 = views.bad_request
+handler403 = views.access_denied
+handler404 = views.page_not_found
+handler500 = views.server_error

@@ -1,7 +1,7 @@
 from django.http.request import HttpRequest
 
 # Para manejar urls
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse
@@ -89,7 +89,7 @@ def register_user(request:HttpRequest):
                 messages.add_message(request, messages.ERROR, item[0].message)
     else:
         form = RegisterForm()
-    return render(request, 'register.html', {'form' : form})
+    return render(request, 'user/register.html', {'form' : form})
 
 def login_user(request:HttpRequest):
     '''
@@ -123,7 +123,7 @@ def login_user(request:HttpRequest):
             messages.add_message(request, messages.ERROR, 'Usuario o contraseña incorrecto.')
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form' : form})
+    return render(request, 'user/login.html', {'form' : form})
 
 def logount_user(request:HttpRequest):
     '''
@@ -145,3 +145,13 @@ def profile(request:HttpRequest):
     #Uso del decorador login_required que verifica si el usuario está autenticado
     #Redirige a settings.LOGIN_URL con el parámetro 'next' en caso contrario
     return render(request, 'profile.html')
+
+def view_user(request:HttpRequest, id_value:int):
+    try:
+        user_obj = User.objects.get(pk=id_value)
+    except:
+        raise Http404
+    user_self = request.user
+    # Check if user has permissions to see the profile
+    context = {'user_obj': user_obj}
+    return render(request, 'user/user.html', context)
