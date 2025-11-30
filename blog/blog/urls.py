@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='home'),
     # Incluir las páginas definidas por las otras apps
-    path('news/', include('apps.news.urls')),
+    path('noticias/', include('apps.news.urls')),
     path('', include('apps.authuser.urls')),
 ]
 

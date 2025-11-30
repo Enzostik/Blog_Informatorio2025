@@ -18,5 +18,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # path('page/', views.page),
+    path('', views.noticias, name='noticias'),
+    path('<int:id_noticia>', views.ver_noticia, name='ver_noticia')
 ]
