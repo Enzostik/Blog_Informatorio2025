@@ -10,6 +10,9 @@
     <p> Fecha: {{ publication.creation_date }} </p>
     <p> Actualizado: {{ publication.last_update }} </p>
     <p> Categoría: {{ publication.category }} </p>
+    {% if publication.image %}
+    <img src="/media/{{ publication.image.image }}" alt="{{ publication.image.epigraph }}" height="500">
+    {% endif %}
     {{ publication.body | safe }}
     <ul>
         <a href={% url "home" %}>Volver a la página principal.</a>
