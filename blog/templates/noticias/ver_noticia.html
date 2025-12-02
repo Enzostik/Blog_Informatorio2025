@@ -14,7 +14,116 @@
     <img src="/media/{{ publication.image.image }}" alt="{{ publication.image.epigraph }}" height="500">
     {% endif %}
     {{ publication.body | safe }}
+    <h2>Comentarios:</h2>
+    <div id='comments-section' ></div>
+    {% if user.is_authenticated %}
+    <div>
+        <input id='new-comment' type="text" name="comment" value="" required>
+        <button id='send-comment' type="submit">Comentar</button>    
+    </div>
+    {% else %}
+    <p><a href="{% url "usuario:login" %}?next={{ request.path }}">Inicia sesión</a> para comentar en esta publicación.</p>
+    {% endif %}
     <ul>
         <a href={% url "home" %}>Volver a la página principal.</a>
     </ul>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+
+    // Obtener el token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Verificar que la coockie corresponda al token
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Obtener comentarios
+    function getComments(id) {
+        fetch(`comments/${idNoticia}`,{
+            method : 'GET',
+            headers : {
+                'X-Requested-With' : 'XMLHttpRequest', //Para comprobar si el request es AJAX
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                // Raise error if invalid response
+                throw new Error(`HTTP ERROR - Status: ${response.status}`);
+            } else {
+                // return response.json()
+                // Si se usa httprequest en django se puede utilizar
+                return response.text();
+            }
+        })
+        .then(data => {
+            // Se completo el request
+            commentSection.innerHTML = data;
+        })  
+        .catch(error=>{
+            // Error
+            console.error(error)
+        });
+    }
+
+    // Seleccionar elementos a interactuar
+    const commentSection = document.getElementById('comments-section')
+    const newComment = document.getElementById('new-comment')
+    const sendComment = document.getElementById('send-comment')
+    // Obtener el valor de la id de la noticia como lista [noticias, <id>]
+    const pathArray = window.location.pathname.split('/');
+    const idNoticia = pathArray[pathArray.length - 1]
+    // Obtener el csrf_token
+    const csrftoken = getCookie('csrftoken');
+    
+    // Load comments
+    document.addEventListener("DOMContentLoaded", ()=> {
+        getComments(idNoticia)
+    })
+    // New comment
+    sendComment?.addEventListener('click', (e) => {
+        let value = newComment.value;
+        if (value.length > 0) {
+            fetch(`comments/${idNoticia}`,{
+            method : 'POST',
+            headers : {
+                'X-Requested-With' : 'XMLHttpRequest', //Para comprobar si el request es AJAX
+                'X-CSRFToken' : csrftoken
+            },
+            body : JSON.stringify({ 'comment': value }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Raise error if invalid response
+                    throw new Error(`HTTP ERROR - Status: ${response.status}`);
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                // Se completo el request
+                console.log(data);
+                // Actualizar los comentarios
+                getComments(idNoticia);
+                // Vaciar el texto ingresado al input
+                newComment.value = '';
+            })  
+            .catch(error=>{
+                // Error
+                console.error(error);
+            });
+        }
+    })
+</script>
+{% endblock scripts %}

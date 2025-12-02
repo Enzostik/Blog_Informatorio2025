@@ -21,5 +21,6 @@ app_name = 'noticias'
 
 urlpatterns = [
     path('', views.noticias, name='buscador'),
-    path('<int:id_noticia>', views.ver_noticia, name='ver_noticia')
+    path('<int:post_id>', views.ver_noticia, name='ver_noticia'),
+    path('comments/<int:post_id>', views.commentar_post, name='comentarios')
 ]
