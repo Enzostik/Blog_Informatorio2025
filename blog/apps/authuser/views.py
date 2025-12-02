@@ -144,7 +144,7 @@ def profile(request:HttpRequest):
     '''
     #Uso del decorador login_required que verifica si el usuario está autenticado
     #Redirige a settings.LOGIN_URL con el parámetro 'next' en caso contrario
-    return render(request, 'profile.html')
+    return render(request, 'user/profile.html')
 
 def view_user(request:HttpRequest, id_value:int):
     try:

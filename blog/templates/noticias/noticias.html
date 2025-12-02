@@ -5,7 +5,7 @@
 {% block content %}
     <h1>TODAS LAS NOTICIAS</h1>
     {% for publication in publicaciones %}
-        <h2><a href={% url 'ver_noticia' publication.id %}>{{ publication.title }}</a></h2>
+        <h2><a href={% url 'noticias:ver_noticia' publication.id %}>{{ publication.title }}</a></h2>
         <p>Escrito por: {{ publication.author.username }}</p>
         <p> Fecha: {{ publication.creation_date }} </p>
     {% endfor %}

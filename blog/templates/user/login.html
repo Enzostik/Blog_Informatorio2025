@@ -16,5 +16,5 @@
         {{ form }}
         <input type="submit" value="Submit">
     </form>
-    <a href={% url 'register' %}?next={{ request.GET.next }}>Crear cuenta</a>
+    <a href={% url 'usuario:register' %}?next={{ request.GET.next }}>Crear cuenta</a>
 {% endblock content %}
