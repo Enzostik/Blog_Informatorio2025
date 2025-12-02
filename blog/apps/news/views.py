@@ -35,7 +35,6 @@ def commentar_post(request:HttpRequest, post_id:int):
             return http_comments
         #POST requiere header con 'X-CSRFToken' con el token actual
         elif request.method == 'POST' and request.user.is_authenticated:
-            print('asd')
             try:
                 data = json.loads(request.body)
                 content = str(data['comment'])
