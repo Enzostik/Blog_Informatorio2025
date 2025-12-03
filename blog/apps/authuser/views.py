@@ -81,8 +81,8 @@ def register_user(request:HttpRequest):
                                  "Cuenta creada exitosamente. Ingrese su usuario y contraseña para iniciar sesión.")
 
             # Si hay variable next en la url pasarla al login
-            return redirect('login' if not request.GET.get('next') else 
-                            reverse('login')+f"?next={request.GET.get('next')}")
+            return redirect('usuario:login' if not request.GET.get('next') else 
+                            reverse('usuario:login')+f"?next={request.GET.get('next')}")
         else:
             #TODO: Agregar los mensajes de campos no válidos del formuario
             for item in form.errors.as_data().values():

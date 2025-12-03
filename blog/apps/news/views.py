@@ -24,9 +24,12 @@ def commentar_post(request:HttpRequest, post_id:int):
             if len(comments) > 0:
                 for comment in comments:
                     http_comments.write(
+                        '<div>'\
                         f'\n<p>Por {comment.author} el {comment.creation_date}</p>'\
                         f'\n<p>{comment.content}</p>'\
-                        f'\n<p>Ultima actualización el {comment.last_update}</p>'
+                        f'\n<p>Ultima actualización el {comment.last_update}</p>'\
+                        f"\n{f'<button comment={comment.pk}>Editar</button>' if comment.author == request.user else ''}"\
+                        '</div>'
                     )
             else:
                 http_comments.write(
