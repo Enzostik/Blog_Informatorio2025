@@ -1,4 +1,5 @@
 import json
+from django.utils import timezone
 from django.http.request import HttpRequest
 from django.shortcuts import render
 
@@ -16,7 +17,7 @@ def ver_noticia(request:HttpRequest, post_id:int):
     publication = Publication.objects.get(pk=post_id)
     return render(request, 'noticias/ver_noticia.html', context={'publication': publication})
 
-def commentar_post(request:HttpRequest, post_id:int):
+def comment_post(request:HttpRequest, post_id:int):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         if request.method == 'GET':
             http_comments = HttpResponse()
@@ -47,4 +48,22 @@ def commentar_post(request:HttpRequest, post_id:int):
                 new_comment = Comment(author=request.user, post_id = post_id, content = content)
                 new_comment.save()
                 return JsonResponse({'success': True}, status=200)
+    return HttpResponse('Invalid AJAX request.', status=400)
+
+def comment_edit(request:HttpRequest):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        if request.method == 'POST' and request.user.is_authenticated():
+            try:
+                data = json.loads(request.body)
+                comment = Comment.objects.get(data['comment-id'])
+                if not request.user.is_staff() or not (comment.author == request.user):
+                    return HttpResponse('Invalid user permissions', status=401)
+                if data['delete-comment']:
+                    comment.delete()
+                else:
+                    comment.content = str(data['edited-comment'])
+                    comment.last_update = timezone.now()
+                    comment.save()
+            except:
+                return HttpResponse('An error has ocurred.', status=500)
     return HttpResponse('Invalid AJAX request.', status=400)
