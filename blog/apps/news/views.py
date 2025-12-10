@@ -13,10 +13,6 @@ from django.http import HttpResponse, JsonResponse
 from .models import Publication, Comment, Category # Importar el modelo Category para la gestión de categorías
 
 # Create your views here.
-def noticias(request:HttpRequest):
-    all_publications = Publication.objects.all().order_by('-creation_date')
-    return render(request, 'noticias/noticias.html', context={'publicaciones': all_publications})
-
 def ver_noticia(request:HttpRequest, post_id:int):
     publication = Publication.objects.get(pk=post_id)
     return render(request, 'noticias/ver_noticia.html', context={'publication': publication})
