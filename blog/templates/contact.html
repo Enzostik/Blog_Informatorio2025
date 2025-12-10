@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block title %}Contacto{% endblock title %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Contacto</h1>
+    <p class="lead">¿Querés decirme algo?</p>
+    <hr class="my-4">
+    <p>Podés contactarme a través del siguiente correo electrónico:</p>
+    <p class="h5">
+        <a href="mailto:contacto@contacto.com" class="text-decoration-none">
+            <i class="fa-solid fa-envelope"></i> contacto@contacto.com
+        </a>
+    </p>
+    <p class="mt-4">También podés ver el repositorio del proyecto:</p>
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <a href="#" class="text-decoration-none h4 me-2"><i class="fab fa-linkedin"></i></a>
+        </li>
+        <li class="list-inline-item">
+            <a href="https://github.com/Enzostik/Blog_Informatorio2025" class="text-decoration-none h4 me-2"><i class="fab fa-github"></i></a>
+        </li>
+    </ul>
+</div>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+
+{% block title %}Resultados de Búsqueda{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Resultados de Búsqueda para "{{ query }}"</h1>
+
+    {% if results %}
+        <div class="row">
+            {% for publication in results %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        {% if publication.image %}
+                            <img src="{{ publication.image.image.url }}" class="card-img-top w-50" alt="{{ publication.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ publication.title }}</h5>
+                            <p class="card-text">{{ publication.title|truncatechars:150 }}</p>
+                            <a href="{% url 'noticias:ver_noticia' publication.pk %}" class="btn btn-primary">Leer más</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Publicado el {{ publication.creation_date|date:"d M, Y" }} por {{ publication.author }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            No se encontraron publicaciones que coincidan con "{{ query }}".
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h1 class="card-title">Confirmar Eliminación de Comentario</h1>
+        </div>
+        <div class="card-body">
+            <p class="card-text">¿Estás seguro de querer eliminar el siguiente comentario?</p>
+            <blockquote class="blockquote mb-0">
+                <p>"{{ comment.content }}"</p>
+                <footer class="blockquote-footer">Por <cite title="Source Title">{{ comment.author.username }}</cite></footer>
+            </blockquote>
+            
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger me-2">Sí, Eliminar</button>
+                <a href="{% url 'noticias:ver_noticia' comment.post.pk %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

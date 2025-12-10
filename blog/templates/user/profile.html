@@ -1,9 +1,35 @@
 {% extends "index.html" %}
 
-{% block title %}Perfil{% endblock title %}
+{% block title %}Perfil de Usuario{% endblock title %}
 
 {% block content %}
-    <h1>PERFIL DE USUARIO</h1>
-    <h3>{{ user.username }}</h3>
-    <p>{{ user.first_name }} {{user.last_name}}</p>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Perfil de Usuario</h1>
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-circle fa-5x text-muted"></i>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Nombre de usuario:</strong> {{ user.username }}</li>
+                        <li class="list-group-item"><strong>Nombre:</strong> {{ user.first_name }}</li>
+                        <li class="list-group-item"><strong>Apellido:</strong> {{ user.last_name }}</li>
+                        <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                        {% if user.is_staff %}
+                            <li class="list-group-item"><strong>Rol:</strong> Colaborador (Acceso a Admin)</li>
+                        {% else %}
+                            <li class="list-group-item"><strong>Rol:</strong> Miembro Registrado</li>
+                        {% endif %}
+                        <li class="list-group-item"><strong>Fecha de Registro:</strong> {{ user.date_joined|date:"d M, Y" }}</li>
+                    </ul>
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary"><i class="fa-solid fa-home"></i> Volver al inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block title %}Noticias de {{ category.name }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Noticias de la categoría: "{{ category.name }}"</h1>
+
+    {% if publications %}
+        <div class="row">
+            {% for publication in publications %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if publication.image %}
+                            <img src="{{ publication.image.image.url }}" class="card-img-top" alt="{{ publication.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ publication.title }}</h5>
+                            <p class="card-text">Escrito por: {{ publication.author.username }}</p>
+                            <p class="card-text"><small class="text-muted">Publicado el: {{ publication.creation_date|date:"d M, Y" }}</small></p>
+                            <a href="{% url 'noticias:ver_noticia' publication.id %}" class="btn btn-primary">Leer más</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            No hay publicaciones disponibles en la categoría "{{ category.name }}".
+        </div>
+    {% endif %}
+
+    <div class="mt-4 text-center">
+        <a href="{% url "categorias:category_list" %}" class="btn btn-secondary me-2">Volver a todas las categorías</a>
+        <a href="{% url "home" %}" class="btn btn-secondary">Volver al inicio</a>
+    </div>
+</div>
+{% endblock content %}

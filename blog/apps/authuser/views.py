@@ -152,6 +152,6 @@ def view_user(request:HttpRequest, id_value:int):
     except:
         raise Http404
     user_self = request.user
-    # Check if user has permissions to see the profile
+    # Revisar si el usuario es él mismo o es staff
     context = {'user_obj': user_obj}
     return render(request, 'user/user.html', context)

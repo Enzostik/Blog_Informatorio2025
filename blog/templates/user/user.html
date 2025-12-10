@@ -1,10 +1,26 @@
 {% extends "index.html" %}
 
-{% block title %}Iniciar sesión{% endblock title %}
+{% block title %}Perfil de {{ user_obj.username }}{% endblock title %}
 
 {% block content %}
-    <h1>PERFIL DEL USUARIO {{ user_obj.username }}</h1>
-    <h2>{{ user_obj.email }}</h2>
-    <h2>{{ user_obj.first_name }}</h2>
-    <h2>{{ user_obj.last_name }}</h2>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Perfil de {{ user_obj.username }}</h1>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Nombre de usuario:</strong> {{ user_obj.username }}</li>
+                        <li class="list-group-item"><strong>Nombre:</strong> {{ user_obj.first_name }}</li>
+                        <li class="list-group-item"><strong>Apellido:</strong> {{ user_obj.last_name }}</li>
+                        <li class="list-group-item"><strong>Email:</strong> {{ user_obj.email }}</li>
+                    </ul>
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'home' %}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
