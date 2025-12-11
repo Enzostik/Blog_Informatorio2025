@@ -11,7 +11,7 @@
                     <h1 class="card-title display-4 text-center mb-3">{{ publication.title }}</h1>
                     <h2 class="card-subtitle h5 text-muted text-center mb-4">{{ publication.subtitle }}</h2>
                     <p class="text-muted text-end fst-italic">
-                        Escrito por: <a href="#">{{ publication.author.username }}</a>
+                        Escrito por: <a href="{% url "usuario:user" publication.author.pk %}">{{ publication.author.username }}</a>
                         <br> Publicado el: {{ publication.creation_date|date:"d M, Y" }}
                         {% if publication.last_update %}
                             <br> Actualizado: {{ publication.last_update|date:"d M, Y" }}
@@ -19,7 +19,10 @@
                         <br> Categoría: <span class="badge bg-info text-dark">{{ publication.category }}</span>
                     </p>
                     {% if publication.image %}
-                        <img src="{{ publication.image.image.url }}" class="img-fluid rounded mb-4 w-100" alt="{{ publication.title }}">
+                    <div class="text-center">
+                        <img src="{{ publication.image.image.url }}" class="img-fluid rounded mb-4 w-50" alt="{{ publication.title }}">
+                        <p class="opacity-75">{{ publication.image.epigraph }}</p>
+                    </div>
                     {% endif %}
                     <hr>
                     <div class="article-body mb-5">

@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="card shadow-sm">
-                <div class="card-body">
+                <div class="card-body form-signin">
                     <h1 class="card-title text-center mb-4">Iniciar Sesión</h1>
                     
                     {% if messages %}
@@ -21,18 +21,18 @@
 
                     <form action="" method="post">
                         {% csrf_token %}
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.help_text %}
-                                    <div class="form-text">{{ field.help_text }}</div>
-                                {% endif %}
-                                {% for error in field.errors %}
-                                    <div class="text-danger small">{{ error }}</div>
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
+                        <div class="form-floating mb-3">
+                            <input name="username" type="text" maxlength="50" required="" id="floatingInput" class="form-control" placeholder="username">
+                            <label for="floatingInput">Usuario</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input name="password" type="password" maxlength="100" required="" id="floatingInput" class="form-control" placeholder="password">
+                            <label for="floatingInput">Contraseña</label>
+                        </div>
+                        <div class="form-check text-start my-3">
+                            <input id="checkDefault" class="form-check-input" type="checkbox" name="remember_me" value="remember_me">
+                            <label class="form-check-label" for="checkDefault">Recuérdame</label>
+                        </div>
                         <div class="d-grid gap-2">
                             <input type="submit" value="Iniciar Sesión" class="btn btn-primary">
                         </div>

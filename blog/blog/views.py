@@ -1,6 +1,9 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render
 
+# Modelos de las publicaciones
+from apps.news.models import Publication
+
 #Error pages
 def error_page(title:str, header:str, content:str, status:int):
     '''
@@ -30,7 +33,11 @@ def error_page(title:str, header:str, content:str, status:int):
 
 # Create your views here.
 def index(request:HttpRequest):
-    return render(request, 'index.html')
+    # Obtener las últimas 3 noticias para mostrar en la página principal
+    publications = Publication.objects.order_by('-creation_date')[:3]
+    # Lista de numeros para utilizar de referencia
+    numbers = list(range(2, len(publications)+2))
+    return render(request, 'index.html', context={ 'publications' : publications, 'numbers': numbers })
 
 @error_page(
         'Página no encontrada',

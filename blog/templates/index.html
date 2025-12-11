@@ -20,9 +20,9 @@
     
     <meta name="theme-color" content="#712cf9">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}">
                     <i class="fa-solid fa-laptop-code"></i>
@@ -83,22 +83,96 @@
         </nav>
     </header>
 
-    <main class="container mt-4">
+    <main class="container mt-4 pt-5 flex-fill">
         {% block content %}
+            <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
+                    {% for n in numbers %}
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{n}}" aria-label="Slide {{n}}" class=""></button>
+                    {% endfor %}
+                    
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" style="height: 400px;">
+                        <svg aria-hidden="true" class="bd-placeholder-img" height="100%" preserveAspectRatio="xMidYMid slice" width="100%" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                        </svg>
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h1>Proyecto BlogInfo2025</h1>
+                                <p class="opacity-75">Conocé más del proyecto en "Acerca de Nosotros"</p>
+                                <p><a class="btn btn-lg btn-primary" href={% url "about" %}>Acerca de nosotros</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% for publication in publications %}
+                    <div class="carousel-item" style="height: 400px;">
+                        <svg aria-hidden="true" class="bd-placeholder-img w-100" height="100%" preserveAspectRatio="xMidYMid slice" width="100%" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                        </svg>
+                        {% if publication.image %}
+                        <img src="{{ publication.image.image.url }}" class="d-block w-100 opacity-75" alt="{{ publication.title}}" style="transform: translateY(-50%);">
+                        {% endif %}
+                        <div class="container">
+                            <div class="carousel-caption text-start">
+                                <h1>{{publication.title}}</h1>
+                                <p class="opacity-75">{{publication.subtitle}}</p>
+                                <p class="opacity-75 text-start fst-italic">
+                                    Escrito por: <a href="{% url "usuario:user" publication.author.pk %}" class="link-light">{{ publication.author.username }}</a>
+                                    <br> Publicado el: {{ publication.creation_date|date:"d M, Y" }}
+                                    <br> Categoría: <span class="badge bg-info text-dark">{{ publication.category }}</span>
+                                </p>
+                                <p><a class="btn btn-lg btn-primary" href="{% url 'noticias:ver_noticia' publication.pk %}">Leer más</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="carousel-item" style="height: 400px;">
+                        <svg aria-hidden="true" class="bd-placeholder-img " height="100%" preserveAspectRatio="xMidYMid slice" width="100%" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                        </svg>
+                        <div class="container">
+                            <div class="carousel-caption text-center">
+                                <h1>¿Quieres leer más noticias?</h1>
+                                <p>Mirá todas las publicaciones de nuestro sitio hacienod click aquí:</p>
+                                <p><a class="btn btn-lg btn-primary" href="{% url "noticias:search_results" %}">Todas las noticias</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
             <div class="p-5 mb-4 bg-light rounded-3">
                 <div class="container-fluid py-5">
                     <h1 class="display-5 fw-bold">Bienvenido a BlogInfo2025</h1>
                     <p class="col-md-8 fs-4">Trabajo final.</p>
+                    <p>Puedes acceder a todas las publicaciones haciendo click acá:</p>
                     <a href="{% url "noticias:search_results" %}" class="btn btn-primary btn-lg">Ver Todas las Noticias</a>
                 </div>
             </div>
         {% endblock content %}
     </main>
 
-    <footer class="bg-dark text-white text-center p-3 mt-4">
-        <div class="container">
-            <p>&copy; 2025 - Grupo 1, Comisión 2, Informatorio.</p>
-        </div>
+    <footer class="bg-dark">
+        <div class="container d-flex flex-wrap align-items-center justify-content-between py-3 my-4 text-white">
+            <div class="col-md-4 d-flex align-items-center">
+                <p>&copy; 2025 - Grupo 1, Comisión 2, Informatorio.</p>
+            </div>
+            <ul class="nav col-md-8 justify-content-end list-unstyled d-flex">
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="https://github.com/Enzostik/Blog_Informatorio2025" aria-label="Github"><i class="fab fa-github fa-2xl" style="color: #ffffff;"></i></a>
+                </li>
+            </ul>
+        <div>
     </footer>
 
     <!-- Bootstrap JS Bundle -->

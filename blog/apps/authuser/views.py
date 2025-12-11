@@ -18,6 +18,9 @@ from django.contrib.auth.models import Permission
 # Cargar formularios
 from .forms import RegisterForm, LoginForm
 
+# Modelo de publicaciones
+from apps.news.models import Publication
+
 def check_redirect(request:HttpRequest, next:str = None)->HttpResponseRedirect :
     '''
     Funcion para verificar si la redirección es segura y dentro del dominio de la app.\n
@@ -78,7 +81,8 @@ def register_user(request:HttpRequest):
             #Escribir un mensaje para indicar al usuario que su cuenta fue creada exitosamente y ahora debe iniciar sesión
             #Dicho mensaje se cargará en la variable 'messages' del request
             messages.add_message(request, messages.SUCCESS,
-                                 "Cuenta creada exitosamente. Ingrese su usuario y contraseña para iniciar sesión.")
+                                 "Cuenta creada exitosamente. Ingrese su usuario y contraseña para iniciar sesión.",
+                                 'success')
 
             # Si hay variable next en la url pasarla al login
             return redirect('usuario:login' if not request.GET.get('next') else 
@@ -86,7 +90,7 @@ def register_user(request:HttpRequest):
         else:
             #TODO: Agregar los mensajes de campos no válidos del formuario
             for item in form.errors.as_data().values():
-                messages.add_message(request, messages.ERROR, item[0].message)
+                messages.add_message(request, messages.ERROR, item[0].message, 'danger')
     else:
         form = RegisterForm()
     return render(request, 'user/register.html', {'form' : form})
@@ -120,7 +124,7 @@ def login_user(request:HttpRequest):
                 #Regresar un redirect a la página principal o a next_page si es segura
                 return check_redirect(request)
             #Si no se ha logrado obtener el usuario, agregar un mensaje de error y renderizar la página con dicho mensaje
-            messages.add_message(request, messages.ERROR, 'Usuario o contraseña incorrecto.')
+            messages.add_message(request, messages.ERROR, 'Usuario o contraseña incorrecto.', 'danger')
     else:
         form = LoginForm()
     return render(request, 'user/login.html', {'form' : form})
@@ -143,15 +147,18 @@ def profile(request:HttpRequest):
     Carga `profile.html`
     '''
     #Uso del decorador login_required que verifica si el usuario está autenticado
+    # Publicaciones del usuario
+    publications = Publication.objects.filter(author=request.user)
     #Redirige a settings.LOGIN_URL con el parámetro 'next' en caso contrario
-    return render(request, 'user/profile.html')
+    return render(request, 'user/profile.html', context={ 'publications': publications })
 
 def view_user(request:HttpRequest, id_value:int):
     try:
         user_obj = User.objects.get(pk=id_value)
     except:
         raise Http404
-    user_self = request.user
+    # Publicaciones del usuario
+    publications = Publication.objects.filter(author=user_obj)
     # Revisar si el usuario es él mismo o es staff
-    context = {'user_obj': user_obj}
+    context = {'user_obj': user_obj, 'publications': publications }
     return render(request, 'user/user.html', context)
