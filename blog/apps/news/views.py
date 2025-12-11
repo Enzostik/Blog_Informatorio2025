@@ -6,29 +6,70 @@ from django.db.models import Q # Importar Q para consultas OR
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied # Importar PermissionDenied
 from django.urls import reverse # Importar reverse
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # Paginator
 from django.http import HttpResponse, JsonResponse
 
 # Modelos de las publicaciones
 from .models import Publication, Comment, Category # Importar el modelo Category para la gestión de categorías
+
+def news_paginator(publications, page:int, qty:int):
+    paginator = Paginator(publications, qty)
+    try:
+        return paginator.page(page)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
 
 # Create your views here.
 def ver_noticia(request:HttpRequest, post_id:int):
     publication = Publication.objects.get(pk=post_id)
     return render(request, 'noticias/ver_noticia.html', context={'publication': publication})
 
+# def search_results(request:HttpRequest):
+#     query = request.GET.get('q')
+#     results = []
+#     if query:
+#         # Filtrar publicaciones por título, ignorando mayúsculas/minúsculas
+#         results = Publication.objects.filter(
+#             Q(title__icontains=query)
+#         ).order_by('-creation_date')
+#     else:
+#         query = 'todas las noticias.'
+#         results = Publication.objects.all().order_by('-creation_date')
+#     return render(request, 'noticias/search_results.html', {'query': query, 'results': results})
+
 def search_results(request:HttpRequest):
-    query = request.GET.get('q')
+    not_found = False
+    # Obtener los parámetros de busqueda
+    query = request.GET.get('q', None)
+    order = ["-", ""][int(request.GET.get('ord', 0))]
+    category = request.GET.getlist('cat', [])
+    attribute = request.GET.get('attr', 'creation_date')
+    if attribute == '' or not hasattr(Publication, attribute):
+        attribute = 'creation_date'
+    # Definir que página visualizar y cuantas noticias por página
+    quantity = request.GET.get('qty', 15)
+    page=request.GET.get('page', 1)
+    search_order = order+attribute
     results = []
     if query:
         # Filtrar publicaciones por título, ignorando mayúsculas/minúsculas
         results = Publication.objects.filter(
             Q(title__icontains=query)
-        ).order_by('-creation_date')
+        ).order_by(search_order)
     else:
         query = 'todas las noticias.'
-        results = Publication.objects.all().order_by('-creation_date')
-    return render(request, 'noticias/search_results.html', {'query': query, 'results': results})
+        results = Publication.objects.all().order_by(search_order)
+    if len(category) > 0:
+        # Filtrar por categorías seleccionadas
+        results = Publication.objects.filter(category__in = category)
+    if results.exists():
+        results = news_paginator(results, page, quantity)
+    # Lista de categorías para poner los botones en el buscador
+    categories = Category.objects.all().order_by('name')
+
+    return render(request, 'noticias/search_results.html', {'query': query, 'results': results, 'categories': categories})
 
 # Vista para listar todas las categorías disponibles
 def category_list(request:HttpRequest):

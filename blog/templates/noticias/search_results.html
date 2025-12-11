@@ -1,35 +1,120 @@
 {% extends 'index.html' %}
 
+{% load static %}
+
 {% block title %}Resultados de Búsqueda{% endblock title %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Resultados de Búsqueda para "{{ query }}"</h1>
-
-    {% if results %}
-        <div class="row">
-            {% for publication in results %}
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100">
-                        {% if publication.image %}
-                        <img src="{{ publication.image.image.url }}" class="card-img-top w-50" alt="{{ publication.title }}">
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ publication.title }}</h5>
-                            <p class="card-text">{{ publication.title|truncatechars:150 }}</p>
-                            <a href="{% url 'noticias:ver_noticia' publication.pk %}" class="btn btn-primary">Leer más</a>
-                        </div>
-                        <div class="card-footer text-muted">
-                            Publicado el {{ publication.creation_date|date:"d M, Y" }} por {{ publication.author }}
-                        </div>
+    <div class="container">
+        <div class="col g-3 py-4 card"  style="opacity: 0.97;">
+            <div class="container">
+                <h1>Buscar:</h2>
+                <div class="row row-cols-2">
+                    <div class="col-9 mx-3">
+                        <input class="form-control mb-3 w-100" id="key-word" type="text" value="{% if query != 'todas las noticias.' %}{{ query }}{% endif %}"">
+                    </div>
+                    <div class="col-1 mx-3">
+                        <button class="btn btn-lg btn-success mb-3" onclick="updateUrl()" type="button">Buscar</button>
                     </div>
                 </div>
-            {% endfor %}
+                <div classs="container">
+                    <label class="mx-3" for="attribute">Ordenar por</label>
+                    <select class="form-select-md mb-3" name="attribute" id="attribute">
+                        <option value="creation_date">Fecha de publicación</option>
+                        <option value="last_update">Última actualización</option>
+                        <option value="title">Título</option>
+                        <option value="author">Autor</option>
+                        <option value="category">Categoría</option>
+                    </select>
+                    <label class="mx-3" for="order">Orden</label>
+                    <select class="form-select-md mb-3" name="order" id="order">
+                        <option value="0">Descendente</option>
+                        <option value="1">Ascendente</option>
+                    </select>
+                    <label class="mx-3" for="quantity">Resultados por página</label>
+                    <select class="form-select-md mb-3" name="quantity" id="quantity">
+                        <option value="6">6</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div class="container text-center" id="categories">
+                    {% for category in categories %}
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input btn-check" id="btn-check-{{category.pk}}" name="{{ category.name }}" value="{{ category.pk }}" autocomplete="off">
+                        <label class="form-check-label btn btn-outline-primary" for="btn-check-{{category.pk}}">{{ category.name }}</label><br>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-            No se encontraron publicaciones que coincidan con "{{ query }}".
-        </div>
-    {% endif %}
+    </div>
+    <!--Paginador-->
+    <table class="table table-dark table-bordered table-striped table-hover">
+        <thead class="thead-dark text-center">
+            <h3 class="text-muted fst-italic text-center mb-4 mt-4">Resultados de Búsqueda para "{{ query }}"</h3>
+        </thead>
+        {% if results.has_other_pages %}
+        <tfoot>
+            <!--Configurar para que tenga tantas paginas necesarias-->
+            <tr>
+                <th colspan="4">
+                    <div class="form-inline">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-md justify-content-center">
+                                <li class="page-item">
+                                    <button class="page-link" id="prevButton" value="" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </button>
+                                </li>
+                                {% for i in results.paginator.page_range %}
+                                <li class="page-item"><button class="page-link" id="buttonPage" value="{{i}}">{{i}}</button></li>
+                                {% endfor %}
+                                <li class="page-item">
+                                    <button class="page-link" id="nextButton" value="" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </th>
+            </tr>
+        </tfoot>
+        {% endif %}
+        <tbody>
+            {% if results %}
+            <div class="row">
+                {% for publication in results %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            {% if publication.image %}
+                            <img src="{{ publication.image.image.url }}" class="card-img-top w-50" alt="{{ publication.title }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ publication.title }}</h5>
+                                <p class="card-text">{{ publication.title|truncatechars:150 }}</p>
+                                <a href="{% url 'noticias:ver_noticia' publication.pk %}" class="btn btn-primary">Leer más</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Publicado el {{ publication.creation_date|date:"d M, Y" }} por {{ publication.author }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                No se encontraron publicaciones que coincidan con "{{ query }}".
+            </div>
+            {% endif %}
+        </tbody>
+    </table>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script src={% static 'js/buscadorPartidas.js' %}></script>
+{% endblock scripts %}
