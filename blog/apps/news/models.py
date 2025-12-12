@@ -22,6 +22,10 @@ class MainImage(models.Model):
     def __str__(self):
         return f'{self.title}({self.author}) el {self.creation_date}'
 
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        return super().delete(*args, **kwargs)
+
     class Meta:
         verbose_name = "Imagen"
         verbose_name_plural = "Imágenes"
