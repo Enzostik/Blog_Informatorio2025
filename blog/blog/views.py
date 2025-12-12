@@ -24,8 +24,6 @@ def error_page(title:str, header:str, content:str, status:int):
             }
             #Get the request and exception of the main function
             request, exception = func(*args, **kwargs)
-            #TODO: To show exception error in server side during testing. Delete after.
-            print(exception)
             #Render HTML with the custom content and status code
             return render(request, 'error_page.html', context, status=status)
         return wrapper
@@ -63,7 +61,7 @@ def bad_request(request:HttpRequest, exception):
         'El servidor ha encontrado un problema para completar su solicitud.',
         500
 )
-def server_error(request:HttpRequest, exception):
+def server_error(request:HttpRequest, exception=None):
     return request, exception
 
 @error_page(
