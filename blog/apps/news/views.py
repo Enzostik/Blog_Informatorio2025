@@ -40,7 +40,6 @@ def ver_noticia(request:HttpRequest, post_id:int):
 #     return render(request, 'noticias/search_results.html', {'query': query, 'results': results})
 
 def search_results(request:HttpRequest):
-    not_found = False
     # Obtener los parámetros de busqueda
     query = request.GET.get('q', None)
     order = ["-", ""][int(request.GET.get('ord', 0))]
@@ -49,7 +48,7 @@ def search_results(request:HttpRequest):
     if attribute == '' or not hasattr(Publication, attribute):
         attribute = 'creation_date'
     # Definir que página visualizar y cuantas noticias por página
-    quantity = request.GET.get('qty', 15)
+    quantity = request.GET.get('qty', 15) or 15
     page=request.GET.get('page', 1)
     search_order = order+attribute
     results = []
@@ -63,7 +62,7 @@ def search_results(request:HttpRequest):
         results = Publication.objects.all().order_by(search_order)
     if len(category) > 0:
         # Filtrar por categorías seleccionadas
-        results = Publication.objects.filter(category__in = category)
+        results = results.filter(category__in = category)
     if results.exists():
         results = news_paginator(results, page, quantity)
     # Lista de categorías para poner los botones en el buscador

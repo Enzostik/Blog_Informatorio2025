@@ -6,24 +6,23 @@
                 <strong class="d-inline-block mb-2 text-primary-emphasis">{{ publication.category.name }}</strong>
                 <h3 class="mb-0">{{ publication.title }}</h3>
                 <div class="mb-1 text-body-secondary">{{ publication.creation_date|date:"d M, Y" }}</div>
-                <p class="card-text mb-auto">{{ publication.subtitle }}</p>
+                    <p class="card-text mb-auto">{{ publication.subtitle }}</p>
                     <a href="{% url "noticias:ver_noticia" publication.pk %}" class="icon-link gap-1 icon-link-hover stretched-link">Continuar leyendo
                         <svg class="bi" aria-hidden="true">
                             <use xlink:href="#chevron-right"></use>
                         </svg>
                     </a>
-                </div>
-                <div class="col-auto d-none d-lg-block">
-                    <svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img" height="250" preserveAspectRatio="xMidYMid slice" role="img" width="200" xmlns="http://www.w3.org/2000/svg">
-                        <title>Placeholder</title>
-                        {% if publication.image %}
-                        <img src="{{ publication.image.image.url }}" class="img-fluid" alt="{{ publication.title }}" style="width: 200px; height: 250px;">
-                        {% else %}
-                        <rect width="100%" height="100%" fill="#55595c"></rect>
-                        <text x="35%" y="50%" fill="#eceeef" dy=".3em">Sin imagen</text>
-                        {% endif %}
-                    </svg>
-                </div>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+                <svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img" height="250" preserveAspectRatio="xMidYMid slice" role="img" width="200" xmlns="http://www.w3.org/2000/svg">
+                    <title>Placeholder</title>
+                    {% if publication.image %}
+                    <img src="{{ publication.image.image.url }}" class="img-fluid" alt="{{ publication.title }}" style="width: 200px; height: 250px;">
+                    {% else %}
+                    <rect width="100%" height="100%" fill="#55595c"></rect>
+                    <text x="35%" y="50%" fill="#eceeef" dy=".3em">Sin imagen</text>
+                    {% endif %}
+                </svg>
             </div>
         </div>
     </div>

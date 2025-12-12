@@ -8,18 +8,17 @@
 <div class="container mt-4">
     <div class="container">
         <div class="col g-3 py-4 card"  style="opacity: 0.97;">
-            <div class="container">
-                <h1>Buscar:</h2>
-                <div class="row row-cols-2">
-                    <div class="col-9 mx-3">
-                        <input class="form-control mb-3 w-100" id="key-word" type="text" value="{% if query != 'todas las noticias.' %}{{ query }}{% endif %}"">
+            <div class="container text-center">
+                <div class='row justify-content-center'>
+                    <div class="col-9 mx-1">
+                        <input class="form-control form-control-lg mb-3" id="key-word" type="text" placeholder="Buscar..." value="">
                     </div>
-                    <div class="col-1 mx-3">
+                    <div class="col-1 mx-1">
                         <button class="btn btn-lg btn-success mb-3" onclick="updateUrl()" type="button">Buscar</button>
                     </div>
                 </div>
-                <div classs="container">
-                    <label class="mx-3" for="attribute">Ordenar por</label>
+                <div classs="row">
+                    <label class="mx-5 me-1" for="attribute">Ordenar por</label>
                     <select class="form-select-md mb-3" name="attribute" id="attribute">
                         <option value="creation_date">Fecha de publicación</option>
                         <option value="last_update">Última actualización</option>
@@ -27,12 +26,12 @@
                         <option value="author">Autor</option>
                         <option value="category">Categoría</option>
                     </select>
-                    <label class="mx-3" for="order">Orden</label>
+                    <label class="mx-5 me-1" for="order">Orden</label>
                     <select class="form-select-md mb-3" name="order" id="order">
                         <option value="0">Descendente</option>
                         <option value="1">Ascendente</option>
                     </select>
-                    <label class="mx-3" for="quantity">Resultados por página</label>
+                    <label class="mx-5 me-1" for="quantity">Resultados por página</label>
                     <select class="form-select-md mb-3" name="quantity" id="quantity">
                         <option value="6">6</option>
                         <option value="10" selected>10</option>

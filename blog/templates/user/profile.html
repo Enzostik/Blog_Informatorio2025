@@ -31,5 +31,14 @@
             </div>
         </div>
     </div>
+    <div class="container p-4">
+        <hr>
+        {% if publications %}
+        <h3 class="text-muted fst-italic text-center">Publicaciones de este usuario</h3>
+        {% include "noticias/_news_list.html" %}
+        {% else %}
+        <h3 class="text-muted fst-italic text-center">Este usuario no tiene noticias publicadas</h3>
+        {% endif %}
+    </div>
 </div>
 {% endblock content %}
