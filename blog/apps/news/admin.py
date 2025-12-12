@@ -8,11 +8,25 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(MainImage)
 class MainImageAdmin(admin.ModelAdmin):
+    exclude = ('author',)
     list_display = ('title', 'author', 'creation_date')
+
+    def save_model(self, request, obj, form, change):
+        # Si no es creación del objecto definir al usuario como el actual
+        if not obj.author_id:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
 
 @admin.register(Publication)
 class PublicationAdmin(admin.ModelAdmin):
+    exclude = ('author',)
     list_display = ('title', 'author', 'creation_date', 'last_update')
+
+    def save_model(self, request, obj, form, change):
+        # Si no es creación del objecto definir al usuario como el actual
+        if not obj.author_id:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

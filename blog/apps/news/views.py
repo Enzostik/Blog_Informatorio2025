@@ -93,7 +93,7 @@ def comment_post(request:HttpRequest, post_id:int):
                     http_comments.write(
                         '<div class="card mb-3">'
                         '<div class="card-body">'
-                        f'<p class="card-text">Por <strong>{comment.author}</strong> el {comment.creation_date.strftime("%d %b, %Y a las %H:%M")}</p>'
+                        f'<p class="card-text">Por <a href="{reverse("usuario:user", args=[comment.author.pk])}"><strong>{comment.author}</strong></a> el {comment.creation_date.strftime("%d %b, %Y a las %H:%M")}</p>'
                         f'<p class="card-text">{comment.content}</p>'
                         f'<p class="card-text"><small class="text-muted">Última actualización el {comment.last_update.strftime("%d %b, %Y a las %H:%M")}</small></p>'
                     )
