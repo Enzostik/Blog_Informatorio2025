@@ -159,3 +159,20 @@ def delete_comment(request:HttpRequest, comment_id:int):
         return redirect('noticias:ver_noticia', post_id=post_id) # Redirigir a la página de la publicación
 
     return render(request, 'noticias/confirm_delete_comment.html', {'comment': comment}) # Confirmación
+
+@login_required
+def delete_news(request:HttpRequest, post_id:int):
+    publication = get_object_or_404(Publication, pk=post_id)
+
+    # Revisar permisos de eliminación: solo autor o staff
+    if not (request.user == publication.author or request.user.is_staff):
+        raise PermissionDenied("No tienes permiso para eliminar este comentario.")
+
+    if request.method == 'POST':
+        # Delete comments
+        Comment.objects.filter(post__id = publication.pk).delete()
+        # Delete publication
+        publication.delete()
+        return redirect('home') # Redirigir a la página de la publicación
+
+    return render(request, 'noticias/confirm_delete_news.html', {'publication': publication}) # Confirmación

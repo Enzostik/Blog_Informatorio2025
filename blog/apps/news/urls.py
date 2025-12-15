@@ -26,6 +26,7 @@ urlpatterns = [
     path('comentarios/<int:post_id>', views.comment_post, name='comentarios'),
     path('comentarios/editar/<int:comment_id>', views.edit_comment, name='edit_comment'),
     path('comentarios/eliminar/<int:comment_id>', views.delete_comment, name='delete_comment'),
+    path('noticia/borrar/<int:post_id>', views.delete_news, name='delete_news'),
 
     # URLs para categorías (para ser incluidas bajo el namespace 'categorias')
     path('lista/', views.category_list, name='category_list'),

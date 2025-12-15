@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h1 class="card-title">Confirmar Eliminación del usuario {{ user_obj.username }}</h1>
+        </div>
+        <div class="card-body">
+            <p class="card-text">¿Estás seguro de querer eliminar el usuario? Esto borrará todos sus noticias y comentarios (si los tenga).</p>
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger me-2">Sí, Eliminar</button>
+                <a href="{% url 'usuario:user' user_obj.pk %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

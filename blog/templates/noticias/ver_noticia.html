@@ -17,6 +17,11 @@
                             <br> Actualizado: {{ publication.last_update|date:"d M, Y" }}
                         {% endif %}
                         <br> Categoría: <span class="badge bg-info text-dark">{{ publication.category }}</span>
+                        {% if user.is_superuser or user.is_staff or user == publication.author %}
+                            <div class="mt-2 text-end">
+                                <a href="{% url "noticias:delete_news" publication.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash-alt"></i> Eliminar noticia</a>
+                            </div>
+                        {% endif %}
                     </p>
                     {% if publication.image %}
                     <div class="text-center">

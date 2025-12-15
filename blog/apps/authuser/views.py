@@ -2,7 +2,7 @@ from django.http.request import HttpRequest
 
 # Para manejar urls
 from django.http.response import HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse
 
@@ -12,6 +12,7 @@ from django.contrib import messages
 # Para manejar permisos
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import PermissionDenied
 from .models import User
 from django.contrib.auth.models import Permission
 
@@ -19,7 +20,7 @@ from django.contrib.auth.models import Permission
 from .forms import RegisterForm, LoginForm
 
 # Modelo de publicaciones
-from apps.news.models import Publication
+from apps.news.models import Publication, UserPost, MainImage
 
 def check_redirect(request:HttpRequest, next:str = None)->HttpResponseRedirect :
     '''
@@ -151,6 +152,25 @@ def profile(request:HttpRequest):
     publications = Publication.objects.filter(author=request.user)
     #Redirige a settings.LOGIN_URL con el parámetro 'next' en caso contrario
     return render(request, 'user/profile.html', context={ 'publications': publications })
+
+@login_required
+def delete_user(request:HttpRequest, id_value:int):
+    if not (request.user.is_superuser or request.user.is_staff):
+        raise PermissionDenied("No tienes permiso para eliminar este usuario.")
+    
+    user_obj = get_object_or_404(User, pk=id_value)
+    if user_obj.is_superuser or user_obj == request.user:
+        raise PermissionDenied("No se puede eliminar este usuario.")
+    
+    if request.method == 'POST':
+        # Borrar todos las publicaciones del usuario
+        UserPost.objects.filter(author=user_obj).delete()
+        # Borrar todas las imágenes que haya subido
+        MainImage.objects.filter(author=user_obj).delete()
+        # Borrar usuario
+        user_obj.delete()
+        return redirect('home') # Redirigir a la página principal
+    return render(request, 'user/confirm_delete_user.html', { 'user_obj': user_obj })
 
 def view_user(request:HttpRequest, id_value:int):
     try:
