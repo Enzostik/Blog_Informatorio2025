@@ -9,7 +9,7 @@
             <h1 class="card-title">Confirmar Eliminación del usuario {{ user_obj.username }}</h1>
         </div>
         <div class="card-body">
-            <p class="card-text">¿Estás seguro de querer eliminar el usuario? Esto borrará todos sus noticias y comentarios (si los tenga).</p>
+            <p class="card-text">¿Estás seguro de querer eliminar el usuario? Esto borrará todas sus noticias y comentarios (si los tiene).</p>
             <form method="post" class="mt-4">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger me-2">Sí, Eliminar</button>
